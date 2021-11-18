@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.stipop.stipop.stipop_plugin">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".GlobalApplication">
+        <activity
+            android:name=".StipopActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+<!--        android:theme="@style/Theme.AppCompat"-->
+
+    </application>
+
+</manifest>
