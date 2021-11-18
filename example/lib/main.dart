@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stipop_plugin/stipop_plugin.dart';
+import 'package:stipop_sdk/stipop_plugin.dart';
 
 void main() {
   runApp(const MyApp());

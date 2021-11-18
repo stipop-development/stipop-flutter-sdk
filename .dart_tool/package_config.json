@@ -404,13 +404,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "stipop_plugin",
+      "name": "stipop_sdk",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-11-18T03:15:55.026257Z",
+  "generated": "2021-11-18T05:09:51.519529Z",
   "generator": "pub",
   "generatorVersion": "2.14.4"
 }

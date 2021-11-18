@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:stipop_plugin/model/sp_package.dart';
-import 'package:stipop_plugin/model/sp_sticker.dart';
+import 'package:stipop_sdk/model/sp_package.dart';
+import 'package:stipop_sdk/model/sp_sticker.dart';
 
 class Stipop {
   static const MethodChannel _channel = MethodChannel('stipop_plugin');

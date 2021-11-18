@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:stipop_plugin/model/sp_sticker.dart';
+import 'package:stipop_sdk/model/sp_sticker.dart';
 
 part 'sp_package.g.dart';
 

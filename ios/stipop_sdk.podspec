@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint stipop_plugin.podspec` to validate before publishing.
+# Run `pod lib lint stipop_sdk.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'stipop_plugin'
+  s.name             = 'stipop_sdk'
   s.version          = '0.0.1'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
