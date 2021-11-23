@@ -14,6 +14,7 @@ class Stipop {
 
   final void Function(SPPackage spPackage)? canDownlaod;
   final void Function(SPSticker sticker)? onStickerSelected;
+  bool _isSearch = false;
 
   Stipop({this.canDownlaod, this.onStickerSelected}) {
     _channel.setMethodCallHandler(
@@ -28,6 +29,7 @@ class Stipop {
             }
             break;
           case ON_STICKER_SELECTED:
+            if (_isSearch) hideKeyboard();
             try {
               onStickerSelected?.call(SPSticker.fromJson(
                   Map<String, dynamic>.from(call.arguments)));
@@ -43,10 +45,12 @@ class Stipop {
   }
 
   Future showKeyboard() async {
+    _isSearch = false;
     return await _channel.invokeMethod(SHOW_KEYBOARD);
   }
 
   Future showSearch() async {
+    _isSearch = true;
     return await _channel.invokeMethod(SHOW_SEARCH);
   }
 

@@ -47,6 +47,11 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Stipop_Sample',
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextButton(
