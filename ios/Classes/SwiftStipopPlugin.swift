@@ -4,6 +4,7 @@ import Stipop
 
 public class SwiftStipopPlugin: NSObject, FlutterPlugin {
     static var channel: FlutterMethodChannel?
+    var currentStipopVC: UIViewController?
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         channel = FlutterMethodChannel(name: "stipop_plugin", binaryMessenger: registrar.messenger())
@@ -23,6 +24,7 @@ public class SwiftStipopPlugin: NSObject, FlutterPlugin {
             let stickerPickerVC = StickerPickerViewController()
             stickerPickerVC.modalPresentationStyle = .overFullScreen
             stickerPickerVC.channel = SwiftStipopPlugin.channel!
+            currentStipopVC = stickerPickerVC
             viewController.present(stickerPickerVC, animated: false, completion: nil)
             result(true)
             break;
@@ -30,10 +32,14 @@ public class SwiftStipopPlugin: NSObject, FlutterPlugin {
             let searchVC = SearchViewController()
             searchVC.modalPresentationStyle = .overFullScreen
             searchVC.channel = SwiftStipopPlugin.channel!
+            currentStipopVC = searchVC
             viewController.present(searchVC, animated: false, completion: nil)
             result(true)
             break;
         case "hideKeyboard":
+            currentStipopVC?.dismiss(animated: false, completion: {
+                self.currentStipopVC = nil
+            })
             result(true)
             break;
         default:

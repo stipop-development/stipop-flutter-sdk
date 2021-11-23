@@ -6,7 +6,7 @@ class SearchViewController: UIViewController {
     var channel: FlutterMethodChannel!
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        super.viewDidLoad()        
         
         let backgroundView = UIView()
         self.view.addSubview(backgroundView)
@@ -49,6 +49,5 @@ extension SearchViewController: SPDelegate {
     
     func onStickerSelect(_ sticker: SPSticker) {
         self.channel.invokeMethod("onStickerSelected", arguments: ["stickerId" : sticker.id, "stickerImg" : sticker.stickerImg, "keyword" : sticker.keyword])
-        self.dismiss(animated: false, completion: nil)
     }
 }
