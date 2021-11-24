@@ -1,11 +1,9 @@
-package com.stipop.stipop.stipop_plugin
+package com.stipop.plugin
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat.getSystemService
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware

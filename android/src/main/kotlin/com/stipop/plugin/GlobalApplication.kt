@@ -1,4 +1,4 @@
-package com.stipop.stipop.stipop_plugin
+package com.stipop.plugin
 
 import android.app.Application
 import android.content.Context

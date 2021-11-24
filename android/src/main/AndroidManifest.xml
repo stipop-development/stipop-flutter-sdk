@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.stipop.stipop.stipop_plugin">
+  package="com.stipop.plugin">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

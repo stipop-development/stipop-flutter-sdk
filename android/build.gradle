@@ -1,4 +1,4 @@
-group 'com.stipop.stipop.stipop_plugin'
+group 'com.stipop.plugin'
 version '1.0-SNAPSHOT'
 
 buildscript {
