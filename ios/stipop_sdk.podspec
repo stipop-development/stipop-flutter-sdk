@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'stipop_sdk'
-  s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.version          = '0.1.0'
+  s.summary          = 'Stipop SDK provides over 150,000 .png and .gif stickers that can be easily integrated into mobile app chats, comment sections, live streams, video calls, etc. '
   s.description      = <<-DESC
 A new flutter plugin project.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Stipop Inc' => 'tech-support@stipop.io' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.static_framework = true
