@@ -1,21 +1,28 @@
-MIT License
+Stipop License
 
-Copyright (c) 2020 Juyoung, Lee
+Copyright (c) 2021 Stipop.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. License Grant
+Subject to the Term's terms, during the Term, Stipop grants to Customer a non-exclusive, non-transferable, non-sublicensable, license to use the Services in Customer Application(s)
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. License Requirements and Restrictions
+The following are conditions of the license granted in Section 3.1 (License Grant). In this Section 3.2 (License Requirements and Restrictions), the phrase “Customer will not” means “Customer will not, and will not permit a third party to”.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+3.2.1 General Restrictions
+Customer will not: (a) copy, modify, create a derivative work of, reverse engineer, decompile, translate, disassemble, or otherwise attempt to extract any or all of the source code (except to the extent such restriction is expressly prohibited by applicable law); (b) sublicense, transfer, or distribute any of the Services; (с) sell, resell, sublicense, transfer, or distribute the Services; or (d) access or use the Services: (i) for High Risk Activities; (ii) in a manner intended to avoid incurring Fees; (iii) for materials or activities that are subject to the International Traffic in Arms Regulations (ITAR) maintained by the United States Department of State; (iv) in a manner that breaches, or causes the breach of, Export Control Laws; or (v) to transmit, store, or process health information subject to United States HIPAA regulations.
+
+3.2.2 Restrictions Against Misusing the Services.
+
+(a) No Scraping. Customer will not export, extract, or otherwise scrape Stipop Sticker content for use outside the Services. For example, Customer will not: (i) pre-fetch, index, store, reshare, or rehost Stipop Sticker content outside the services; (ii) bulk download Stipop Sticker images(including URLs), titles, descriptions, artists’ information, metadata, and labels; (iii) copy and save business names, addresses, or user reviews.
+
+(b) No Caching. Customer will not cache Stipop Sticker Content except as expressly permitted under the Sticker Service Specific Terms.
+
+(с) No Creating Content From Stipop Sticker Content. Customer will not create content based on Stipop Sticker Content. For example, Customer will not: (i) trace or digitize roadways, building outlines, utility posts, or electrical lines; (ii) create 3D models from 45° Imagery.
+
+(d) No Re-Creating Stipop Products or Features. Customer will not use the Services to create a product or service with features that are substantially similar to or that re-create the features of another Stipop product or service. Customer’s product or service must contain substantial, independent value and features beyond the Stipop products or services. For example, Customer will not: (i) re-distribute the Stipop Sticker Core Services or pass them off as if they were Customer’s services; (ii) use the Stipop Sticker Core Services to create a substitute of the Stipop Sticker Core Services, Stipop Sticker, or Stipop Sticker mobile apps, or their features; (iii) use the Stipop Sticker Core Services in a listings or directory service or to create or augment an advertising product.
+
+(e) No Circumventing Fees. Customer will not circumvent the applicable Fees. For example, Customer will not create multiple billing accounts or Applications to avoid incurring Fees, prevent Stipop from accurately calculating Customer’s Service usage levels, abuse any free Service quotas, or offer access to the Services under a “time-sharing” or “service bureau” model.
+
+(f) No Use in Prohibited Territories. Customer will not distribute or market in a Prohibited Territory any Customer Application(s) that use the Stipop Sticker Core Services.
+
+(g) No Modifying Search Results Integrity. Customer will not modify any of the Stipop Sticker Core Services’ search results.
