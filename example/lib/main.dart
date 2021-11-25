@@ -16,11 +16,12 @@ class _MyAppState extends State<MyApp> {
   late Stipop stipop;
   String callbackMsg = '';
   String? stickerImg = null;
+
   @override
   void initState() {
     super.initState();
     stipop = Stipop(
-      canDownlaod: (spPackage) {
+      onStickerPackSelected: (spPackage) {
         setState(() {
           callbackMsg = 'canDownlaod\n${spPackage.toJson()}';
           stickerImg = null;
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                TextField(
+                const TextField(
                   decoration: InputDecoration(
                     hintText: 'Stipop_Sample',
                   ),
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {
                       stipop.showKeyboard();
                     },
-                    child: Text('Show Keyboard'),
+                    child: const Text('Show Keyboard'),
                   ),
                 ),
                 Padding(
@@ -67,7 +68,7 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {
                       stipop.showSearch();
                     },
-                    child: Text('Show Search'),
+                    child: const Text('Show Search'),
                   ),
                 ),
                 if (stickerImg != null)
