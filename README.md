@@ -1,5 +1,5 @@
 # Flutter Plugin for Stipop UI SDK
-
+![139039262-2fc7a0d2-d000-4848-b7be-eee2beede9f8](https://user-images.githubusercontent.com/42525347/143364965-8c6eb4cb-6108-48e7-810d-09a003f9ee4d.png)
 Stipop SDK provides over 150,000 .png and .gif stickers that can be easily integrated into mobile app chats, comment sections, live streams, video calls, and other features. Bring fun to your mobile app with stickers loved by millions of users worldwide.
 
 
@@ -7,6 +7,7 @@ Stipop SDK provides over 150,000 .png and .gif stickers that can be easily integ
 ## Getting Started
 
 Install plugin and follow below steps.
+
 
 #### Android Integration
 
