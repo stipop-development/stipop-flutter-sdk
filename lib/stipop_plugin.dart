@@ -9,20 +9,20 @@ class Stipop {
   static const String SHOW_KEYBOARD = 'showKeyboard';
   static const String SHOW_SEARCH = 'showSearch';
   static const String HIDE_KEYBOARD = 'hideKeyboard';
-  static const String CAN_DOWNLOAD = 'canDownload';
+  static const String ON_STICKER_PACK_SELECTED = 'canDownload';
   static const String ON_STICKER_SELECTED = 'onStickerSelected';
 
-  final void Function(SPPackage spPackage)? canDownlaod;
-  final void Function(SPSticker sticker)? onStickerSelected;
+  final void Function(SPPackage spPackage)? onStickerPackSelected;
+  final void Function(SPSticker spSticker)? onStickerSelected;
   bool _isSearch = false;
 
-  Stipop({this.canDownlaod, this.onStickerSelected}) {
+  Stipop({this.onStickerPackSelected, this.onStickerSelected}) {
     _channel.setMethodCallHandler(
       (call) async {
         switch (call.method) {
-          case CAN_DOWNLOAD:
+          case ON_STICKER_PACK_SELECTED:
             try {
-              canDownlaod?.call(SPPackage.fromJson(
+              onStickerPackSelected?.call(SPPackage.fromJson(
                   Map<String, dynamic>.from(call.arguments)));
             } catch (e) {
               throw convertErrorToPlatformException(e);

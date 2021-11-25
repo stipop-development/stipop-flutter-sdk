@@ -36,9 +36,9 @@ Stipop().showKeyboard();
 
 ```dart
 Stipop(
-    canDownlaod: (spPackage) {        
+    onStickerPackSelected: (spPackage) {        
     },
-    onStickerSelected: (sticker) {        
+    onStickerSelected: (spSticker) {        
     },
 );
 ```
