@@ -9,6 +9,7 @@ class StickerPickerViewController: UIViewController {
         super.viewDidLoad()
         
         pickerView.delegate = self
+        pickerView.setUser(SPUser(userID: "some_user_id"))
         self.view.addSubview(pickerView)
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         pickerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -39,14 +40,8 @@ class StickerPickerViewController: UIViewController {
     @objc func handleTap(sender: UITapGestureRecognizer) { self.dismiss(animated: false, completion: nil) }
 }
 
-extension StickerPickerViewController: SPDelegate {
-    var user: SPUser {
-        return SPUser(userID: "some_user_id")
-    }
-    
-    func onStickerSelect(_ sticker: SPSticker) {
+extension StickerPickerViewController: SPUIDelegate {
+    func spViewDidSelectSticker(_ view: SPUIView, sticker: SPSticker) {
         self.channel.invokeMethod("onStickerSelected", arguments: ["stickerId" : sticker.id, "stickerImg" : sticker.stickerImg, "keyword" : sticker.keyword])
     }
-    
-    
 }
