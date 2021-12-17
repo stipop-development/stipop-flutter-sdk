@@ -19,20 +19,20 @@ import io.stipop.models.SPSticker
 
 /** StipopPlugin */
 class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAware {
+
   companion object {
     lateinit var channel : MethodChannel
   }
+
   private lateinit var mContext : Context
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    print("here")
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "stipop_plugin")
     channel.setMethodCallHandler(this)
     mContext = flutterPluginBinding.applicationContext
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    print("here3")
     if (call.method == "showKeyboard") {
       Stipop.showKeyboard()
       result.success(true)
@@ -110,7 +110,6 @@ class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAw
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    print("here2")
     Stipop.connect(binding.activity, "stipop_user", this)
   }
 
