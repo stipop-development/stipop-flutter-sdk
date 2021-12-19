@@ -21,6 +21,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     stipop = Stipop(
+      'some_user_id',
+      languageCode: 'kr',
       onStickerPackSelected: (spPackage) {
         setState(() {
           callbackMsg = 'canDownlaod\n${spPackage.toJson()}';

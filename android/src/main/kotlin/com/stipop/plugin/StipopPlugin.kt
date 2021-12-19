@@ -14,17 +14,24 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.stipop.Stipop
 import io.stipop.StipopDelegate
+import io.stipop.custom.StipopImageView
 import io.stipop.models.SPPackage
 import io.stipop.models.SPSticker
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /** StipopPlugin */
 class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAware {
 
   companion object {
     lateinit var channel : MethodChannel
+    const val ARG_USER_ID = "userID"
+    const val ARG_LOCALE = "locale"
   }
 
   private lateinit var mContext : Context
+  private lateinit var activity : Activity
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "stipop_plugin")
@@ -33,11 +40,26 @@ class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAw
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    val localeString = call.argument<String>(ARG_LOCALE)
+    val locale = if(localeString != null) {
+      Locale(localeString)
+    }else {
+      Locale.getDefault()
+    }
+    val userId = call.argument<String>(ARG_USER_ID)
     if (call.method == "showKeyboard") {
-      Stipop.showKeyboard()
+      Stipop.connect(activity, userId!!, this, null, locale, taskCallBack = { isConnected ->
+        when(isConnected){
+          true -> Stipop.showKeyboard()
+        }
+      })
       result.success(true)
     } else if (call.method == "showSearch") {
-      Stipop.showSearch()
+      Stipop.connect(activity, userId!!, this, null, locale, taskCallBack = { isConnected ->
+        when(isConnected){
+          true -> Stipop.showSearch()
+        }
+      })
       result.success(true)
     } else if (call.method == "hideKeyboard") {
       this.hideKeyboard()
@@ -110,7 +132,7 @@ class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAw
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    Stipop.connect(binding.activity, "stipop_user", this)
+    activity = binding.activity
   }
 
   override fun onDetachedFromActivityForConfigChanges() {

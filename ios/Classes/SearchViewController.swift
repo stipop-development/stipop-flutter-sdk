@@ -4,6 +4,7 @@ import Stipop
 class SearchViewController: UIViewController {
     let searchVC = SPUISearchViewController()
     var channel: FlutterMethodChannel!
+    var userID: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()        
@@ -19,7 +20,7 @@ class SearchViewController: UIViewController {
         backgroundView.addGestureRecognizer(tapGesture)
         
         searchVC.delegate = self
-        searchVC.setUser(SPUser(userID: "some_user_id"))
+        searchVC.setUser(SPUser(userID: self.userID))
         if let searchView = searchVC.view {
             self.view.addSubview(searchView)
             searchView.translatesAutoresizingMaskIntoConstraints = false

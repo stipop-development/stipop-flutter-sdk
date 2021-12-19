@@ -22,16 +22,26 @@ public class SwiftStipopPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "showKeyboard":
             let stickerPickerVC = StickerPickerViewController()
+            guard let arguments = call.arguments as? Dictionary<String, Any>, let userID = arguments["userID"] as? String else{
+                result(FlutterMethodNotImplemented)
+                return
+            }
             stickerPickerVC.modalPresentationStyle = .overFullScreen
             stickerPickerVC.channel = SwiftStipopPlugin.channel!
+            stickerPickerVC.userID = userID
             currentStipopVC = stickerPickerVC
             viewController.present(stickerPickerVC, animated: false, completion: nil)
             result(true)
             break;
         case "showSearch":
             let searchVC = SearchViewController()
+            guard let arguments = call.arguments as? Dictionary<String, Any>, let userID = arguments["userID"] as? String else{
+                result(FlutterMethodNotImplemented)
+                return
+            }
             searchVC.modalPresentationStyle = .overFullScreen
             searchVC.channel = SwiftStipopPlugin.channel!
+            searchVC.userID = userID
             currentStipopVC = searchVC
             viewController.present(searchVC, animated: false, completion: nil)
             result(true)

@@ -4,12 +4,13 @@ import Stipop
 class StickerPickerViewController: UIViewController {
     let pickerView = SPUIPickerView()
     var channel: FlutterMethodChannel!
+    var userID: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pickerView.delegate = self
-        pickerView.setUser(SPUser(userID: "some_user_id"))
+        pickerView.setUser(SPUser(userID: self.userID))
         self.view.addSubview(pickerView)
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         pickerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
