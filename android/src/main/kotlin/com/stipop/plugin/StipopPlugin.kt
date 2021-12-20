@@ -19,9 +19,11 @@ import io.stipop.models.SPSticker
 
 /** StipopPlugin */
 class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAware {
+
   companion object {
     lateinit var channel : MethodChannel
   }
+
   private lateinit var mContext : Context
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
@@ -56,51 +58,59 @@ class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAw
     channel.setMethodCallHandler(null)
   }
 
-  override fun onStickerPackageRequested(spPackage: SPPackage): Boolean {
-    var arguments = HashMap<String, Any>()
-    spPackage.artistName?.let { arguments.put("artistName", it) }
-    spPackage.download?.let { arguments.put("download", it) }
-    spPackage.language?.let { arguments.put("language", it) }
-    spPackage.new?.let { arguments.put("new", it) }
-    spPackage.packageAnimated?.let { arguments.put("packageAnimated", it) }
-    spPackage.packageCategory?.let { arguments.put("packageCategory", it) }
-    arguments.put("packageId", spPackage.packageId)
-    spPackage.packageImg?.let { arguments.put("packageImg", it) }
-    spPackage.packageKeywords?.let { arguments.put("packageKeywords", it) }
-    spPackage.packageName?.let { arguments.put("packageName", it) }
-    spPackage.wish?.let { arguments.put("wish", it) }
-    spPackage.view?.let { arguments.put("view", it) }
-    arguments.put("order", spPackage.order)
-    var stickers = ArrayList<HashMap<String, Any>>()
-    for (sticker in spPackage.stickers) {
-      var stickerArg = HashMap<String, Any>()
-      stickerArg.put("packageId", sticker.packageId)
-      stickerArg.put("stickerId", sticker.stickerId)
-      sticker.stickerImg?.let { stickerArg.put("stickerImg", it) }
-      sticker.stickerImgLocalFilePath?.let { stickerArg.put("stickerImgLocalFilePath", it) }
-      stickerArg.put("favoriteYN", sticker.favoriteYN)
-      stickerArg.put("keyword", sticker.keyword)
-      stickers.add(stickerArg)
+  override fun onStickerPackRequested(spPackage: SPPackage): Boolean {
+    with(spPackage){
+      val arguments = HashMap<String, Any>()
+      val stickers = ArrayList<HashMap<String, Any>>()
+      for (sticker in spPackage.stickers) {
+        val stickerArg = HashMap<String, Any>()
+        stickerArg["packageId"] = sticker.packageId
+        stickerArg["stickerId"] = sticker.stickerId
+        sticker.stickerImg?.let { stickerArg.put("stickerImg", it) }
+        sticker.stickerImgLocalFilePath?.let { stickerArg.put("stickerImgLocalFilePath", it) }
+        stickerArg["favoriteYN"] = sticker.favoriteYN
+        stickerArg["keyword"] = sticker.keyword
+        stickers.add(stickerArg)
+      }
+      arguments.apply {
+        artistName?.let { arguments.put("artistName", it) }
+        download?.let { arguments.put("download", it) }
+        language?.let { arguments.put("language", it) }
+        new?.let { arguments.put("new", it) }
+        packageAnimated?.let { arguments.put("packageAnimated", it) }
+        packageCategory?.let { arguments.put("packageCategory", it) }
+        packageId.let { arguments.put("packageId", it) }
+        packageImg?.let { arguments.put("packageImg", it) }
+        packageKeywords?.let { arguments.put("packageKeywords", it) }
+        packageName?.let { arguments.put("packageName", it) }
+        wish?.let { arguments.put("wish", it) }
+        view?.let { arguments.put("view", it) }
+        order.let { arguments.put("order", it) }
+        stickers.let{ arguments.put("stickers", it) }
+      }.run {
+        channel.invokeMethod("onStickerPackRequested", this)
+      }
     }
-    arguments.put("stickers", stickers)
-    channel.invokeMethod("canDownload", arguments)
     return true
   }
 
   override fun onStickerSelected(sticker: SPSticker): Boolean {
-    var arguments = HashMap<String, Any>()
-    arguments.put("packageId", sticker.packageId)
-    arguments.put("stickerId", sticker.stickerId)
-    sticker.stickerImg?.let { arguments.put("stickerImg", it) }
-    sticker.stickerImgLocalFilePath?.let { arguments.put("stickerImgLocalFilePath", it) }
-    arguments.put("favoriteYN", sticker.favoriteYN)
-    arguments.put("keyword", sticker.keyword)
-    channel.invokeMethod("onStickerSelected", arguments)
+    val arguments = HashMap<String, Any>()
+    arguments.apply {
+      arguments["packageId"] = sticker.packageId
+      arguments["stickerId"] = sticker.stickerId
+      sticker.stickerImg?.let { arguments.put("stickerImg", it) }
+      sticker.stickerImgLocalFilePath?.let { arguments.put("stickerImgLocalFilePath", it) }
+      arguments["favoriteYN"] = sticker.favoriteYN
+      arguments["keyword"] = sticker.keyword
+    }.run {
+      channel.invokeMethod("onStickerSelected", this)
+    }
     return true
   }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    Stipop.Companion.connect(binding.activity, "stipop_user", this)
+    Stipop.connect(binding.activity, "stipop_user", this)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
