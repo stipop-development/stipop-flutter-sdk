@@ -22,11 +22,11 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     stipop = Stipop(
       'some_user_id',
-      languageCode: 'kr',
-      countryCode: 'ko',
+      languageCode: 'en',
+      countryCode: 'US',
       onStickerPackSelected: (spPackage) {
         setState(() {
-          callbackMsg = 'canDownlaod\n${spPackage.toJson()}';
+          callbackMsg = 'onStickerPackSelected\n${spPackage.toJson()}';
           stickerImg = null;
         });
       },
@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('Plugin example app'),
+            title: const Text('Stipop Plugin Example'),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
               children: <Widget>[
                 const TextField(
                   decoration: InputDecoration(
-                    hintText: 'Stipop_Sample',
+                    hintText: 'Sample TextField',
                   ),
                 ),
                 Padding(
@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {
                       stipop.showKeyboard();
                     },
-                    child: const Text('Show Keyboard'),
+                    child: const Text('Click to show Keyboard View'),
                   ),
                 ),
                 Padding(
@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {
                       stipop.showSearch();
                     },
-                    child: const Text('Show Search'),
+                    child: const Text('Click to show Search View'),
                   ),
                 ),
                 if (stickerImg != null)
@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
                     height: 100,
                   ),
                 Expanded(
-                  child: Text('Stipop Callback\n$callbackMsg'),
+                  child: Text('Callback : \n$callbackMsg'),
                 ),
               ],
             ),
