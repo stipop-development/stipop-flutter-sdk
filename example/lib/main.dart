@@ -23,6 +23,7 @@ class _MyAppState extends State<MyApp> {
     stipop = Stipop(
       'some_user_id',
       languageCode: 'kr',
+      countryCode: 'ko',
       onStickerPackSelected: (spPackage) {
         setState(() {
           callbackMsg = 'canDownlaod\n${spPackage.toJson()}';

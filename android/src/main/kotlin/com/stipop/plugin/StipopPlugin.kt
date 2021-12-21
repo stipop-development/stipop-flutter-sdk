@@ -27,7 +27,8 @@ class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAw
   companion object {
     lateinit var channel : MethodChannel
     const val ARG_USER_ID = "userID"
-    const val ARG_LOCALE = "locale"
+    const val ARG_LANGUAGE = "languageCode"
+    const val ARG_COUNTRY = "countryCode"
   }
 
   private lateinit var mContext : Context
@@ -40,9 +41,10 @@ class StipopPlugin: FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAw
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    val localeString = call.argument<String>(ARG_LOCALE)
-    val locale = if(localeString != null) {
-      Locale(localeString)
+    val languageCode = call.argument<String>(ARG_LANGUAGE)
+    val countryCode = call.argument<String>(ARG_COUNTRY)
+    val locale = if(languageCode != null && countryCode != null) {
+      Locale(languageCode, countryCode)
     }else {
       Locale.getDefault()
     }

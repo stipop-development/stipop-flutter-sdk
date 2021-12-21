@@ -5,12 +5,15 @@ class StickerPickerViewController: UIViewController {
     let pickerView = SPUIPickerView()
     var channel: FlutterMethodChannel!
     var userID: String!
+    var languageCode: String?
+    var countryCode: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pickerView.delegate = self
-        pickerView.setUser(SPUser(userID: self.userID))
+        var user = (languageCode != nil && countryCode != nil) ? SPUser(userID: self.userID, country: self.countryCode!, language: self.languageCode!) : SPUser(userID: self.userID)
+        pickerView.setUser(user)
         self.view.addSubview(pickerView)
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         pickerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true

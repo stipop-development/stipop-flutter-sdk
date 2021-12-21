@@ -29,6 +29,10 @@ public class SwiftStipopPlugin: NSObject, FlutterPlugin {
             stickerPickerVC.modalPresentationStyle = .overFullScreen
             stickerPickerVC.channel = SwiftStipopPlugin.channel!
             stickerPickerVC.userID = userID
+            if let arguments = call.arguments as? Dictionary<String, Any>, let languageCode = arguments["languageCode"] as? String, let countryCode = arguments["countryCode"] as? String {
+                stickerPickerVC.languageCode = languageCode
+                stickerPickerVC.countryCode = countryCode
+            }
             currentStipopVC = stickerPickerVC
             viewController.present(stickerPickerVC, animated: false, completion: nil)
             result(true)
@@ -42,6 +46,10 @@ public class SwiftStipopPlugin: NSObject, FlutterPlugin {
             searchVC.modalPresentationStyle = .overFullScreen
             searchVC.channel = SwiftStipopPlugin.channel!
             searchVC.userID = userID
+            if let arguments = call.arguments as? Dictionary<String, Any>, let languageCode = arguments["languageCode"] as? String, let countryCode = arguments["countryCode"] as? String {
+                searchVC.languageCode = languageCode
+                searchVC.countryCode = countryCode
+            }
             currentStipopVC = searchVC
             viewController.present(searchVC, animated: false, completion: nil)
             result(true)

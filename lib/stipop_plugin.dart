@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:stipop_sdk/model/sp_package.dart';
 import 'package:stipop_sdk/model/sp_sticker.dart';
@@ -18,12 +19,20 @@ class Stipop {
   final void Function(SPSticker spSticker)? onStickerSelected;
   final String userId;
   final String? languageCode;
+  final String? countryCode;
 
   bool _isSearch = false;
 
   Stipop(this.userId,
-      {this.languageCode, this.onStickerPackSelected, this.onStickerSelected})
-      : assert(userId.isNotEmpty, 'userID should not be empty') {
+      {this.languageCode,
+      this.countryCode,
+      this.onStickerPackSelected,
+      this.onStickerSelected})
+      : assert(userId.isNotEmpty, 'userID should not be empty'),
+        assert(
+            (languageCode == null && countryCode == null) ||
+                (languageCode != null && countryCode != null),
+            'languageCode and countryCode should be null or not empty same time') {
     _channel.setMethodCallHandler(
       (call) async {
         switch (call.method) {
@@ -54,14 +63,20 @@ class Stipop {
 
   Future showKeyboard() async {
     _isSearch = false;
-    return await _channel.invokeMethod(
-        SHOW_KEYBOARD, {'userID': userId, 'locale': languageCode});
+    return await _channel.invokeMethod(SHOW_KEYBOARD, {
+      'userID': userId,
+      'languageCode': languageCode,
+      'countryCode': countryCode
+    });
   }
 
   Future showSearch() async {
     _isSearch = true;
-    return await _channel
-        .invokeMethod(SHOW_SEARCH, {'userID': userId, 'locale': languageCode});
+    return await _channel.invokeMethod(SHOW_SEARCH, {
+      'userID': userId,
+      'languageCode': languageCode,
+      'countryCode': countryCode
+    });
   }
 
   Future hideKeyboard() async {
