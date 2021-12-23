@@ -4,17 +4,18 @@ import android.app.Activity
 import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.NonNull
-
+import androidx.fragment.app.FragmentActivity
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.stipop.Stipop
 import io.stipop.StipopDelegate
-import io.stipop.custom.StipopImageView
 import io.stipop.models.SPPackage
 import io.stipop.models.SPSticker
 import java.util.*
@@ -32,7 +33,7 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
     }
 
     private lateinit var mContext: Context
-    private lateinit var activity: Activity
+    private lateinit var activity: FragmentActivity
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "stipop_plugin")
@@ -140,7 +141,7 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
+        activity = binding.activity as FragmentActivity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {

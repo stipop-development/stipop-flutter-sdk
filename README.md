@@ -29,6 +29,16 @@ dependencies {
   implementation 'com.github.stipop-development:stipop-android-sdk:0.3.2' 
 }
 ```
+6. Move at 'android/app/src/main/res/styles.xml' and change 'parent' to inherit 'Theme.MaterialComponents' because SDK UI uses MaterialComponents. 
+
+```xml
+
+```
+7. Move at 'android/app/src/main/{package}/MainActivity' and change 'FlutterActivity' to 'FlutterFragmentActivity' because SDK uses AndroidX UI components.
+
+```kotlin
+
+```
 
 #### iOS Integration
 
