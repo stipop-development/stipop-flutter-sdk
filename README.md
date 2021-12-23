@@ -26,8 +26,28 @@ allprojects {
 }
 // at app level build.gradle
 dependencies {
-  implementation 'com.github.stipop-development:stipop-android-sdk:0.3.2' 
+  implementation 'com.github.stipop-development:stipop-android-sdk:0.5.0' 
 }
+```
+6. Move at 'android/app/src/main/res/styles.xml' and change 'parent' to inherit 'Theme.MaterialComponents' because SDK UI uses MaterialComponents. Like below.
+
+```xml
+    <style name="LaunchTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/launch_background</item>
+    </style>
+
+    <style name="NormalTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">?android:colorBackground</item>
+    </style>
+```
+7. Move at 'android/app/src/main/{package}/MainActivity' and change 'FlutterActivity' to 'FlutterFragmentActivity' because SDK uses AndroidX UI components.
+
+```kotlin
+package com.stipop.stipop.stipop_plugin_example
+
+import io.flutter.embedding.android.FlutterFragmentActivity
+
+class MainActivity: FlutterFragmentActivity()
 ```
 
 #### iOS Integration
@@ -52,12 +72,39 @@ dependencies {
 
 ## Usage
 
+#### Implement Sticker Send (Listening sticker, sticker pack selection event)
+
+You might call this method at like 'initState()'.
+
+```dart
+  @override
+  void initState() {
+    super.initState();
+    stipop = Stipop(
+      'some_user_id',
+      languageCode: 'en', 
+      countryCode: 'US',
+      onStickerPackSelected: (spPackage) {
+        // Selected Sticker Pack passed here.
+        setState(() {
+          
+        });
+      },
+      onStickerSelected: (sticker) {
+        // Selected Sticker passed here.
+        setState(() {
+          
+        });
+      },
+    );
+  }
+```
 #### Show Search (Sticker Search View)
 
 **Search View** is where users can search for stickers with search tags like happy, sad, what!, and more and find stickers they can send on chat.
 
 ```dart
-Stipop().showSearch();
+stipop.showSearch();
 ```
 
 #### Show Keyboard (Sticker Picker View on Keyboard)
@@ -65,28 +112,13 @@ Stipop().showSearch();
 **Sticker Picker View** provides in-depth sticker experience. Instead of instantaneous usage from the Search View, users can download and own stickers for a more intimate sticker sending experience.
 
 ```dart
-Stipop().showKeyboard();
+stipop.showKeyboard();
 ```
 
 This method will hide 'Sticker Picker VIew', if it is currently showing.
 
 ```dart
-Stipop().hideKeyboard();
-```
-
-#### Implement Sticker Send (Listening sticker, sticker pack selection event)
-
-You might call this method at like 'initState()'.
-
-```dart
-Stipop(
-    onStickerPackSelected: (spPackage) {
-      // do something with sticker pack
-    },
-    onStickerSelected: (spSticker) {        
-      // do something with sticker
-    },
-);
+stipop.hideKeyboard();
 ```
 
 

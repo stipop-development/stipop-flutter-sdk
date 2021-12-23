@@ -2,16 +2,11 @@ package com.stipop.plugin
 
 import android.app.Application
 import android.content.Context
+import androidx.multidex.MultiDexApplication
 import io.stipop.Stipop
-class GlobalApplication : Application() {
-    companion object {
-        lateinit var instance: GlobalApplication
-            private set
-    }
+class GlobalApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
-        instance = this
         Stipop.configure(this)
     }
-    fun context(): Context = applicationContext
 }

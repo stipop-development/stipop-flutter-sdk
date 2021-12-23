@@ -4,11 +4,16 @@ import Stipop
 class StickerPickerViewController: UIViewController {
     let pickerView = SPUIPickerView()
     var channel: FlutterMethodChannel!
+    var userID: String!
+    var languageCode: String?
+    var countryCode: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pickerView.delegate = self
+        var user = (languageCode != nil && countryCode != nil) ? SPUser(userID: self.userID, country: self.countryCode!, language: self.languageCode!) : SPUser(userID: self.userID)
+        pickerView.setUser(user)
         self.view.addSubview(pickerView)
         pickerView.translatesAutoresizingMaskIntoConstraints = false
         pickerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -39,14 +44,8 @@ class StickerPickerViewController: UIViewController {
     @objc func handleTap(sender: UITapGestureRecognizer) { self.dismiss(animated: false, completion: nil) }
 }
 
-extension StickerPickerViewController: SPDelegate {
-    var user: SPUser {
-        return SPUser(userID: "some_user_id")
-    }
-    
-    func onStickerSelect(_ sticker: SPSticker) {
+extension StickerPickerViewController: SPUIDelegate {
+    func spViewDidSelectSticker(_ view: SPUIView, sticker: SPSticker) {
         self.channel.invokeMethod("onStickerSelected", arguments: ["stickerId" : sticker.id, "stickerImg" : sticker.stickerImg, "keyword" : sticker.keyword])
     }
-    
-    
 }

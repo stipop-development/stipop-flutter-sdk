@@ -16,7 +16,7 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.static_framework = true
   s.dependency 'Flutter'
-  s.dependency 'Stipop', '0.2.1'
+  s.dependency 'Stipop', '0.3.0-beta.1'
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice.
