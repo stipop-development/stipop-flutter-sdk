@@ -32,7 +32,7 @@ class Stipop {
         assert(
             (languageCode == null && countryCode == null) ||
                 (languageCode != null && countryCode != null),
-            'languageCode and countryCode should be null or not empty same time') {}
+            'languageCode and countryCode should be null or not empty same time');
 
   Future showKeyboard() async {
     _isSearch = false;
