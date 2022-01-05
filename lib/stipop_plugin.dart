@@ -32,7 +32,10 @@ class Stipop {
         assert(
             (languageCode == null && countryCode == null) ||
                 (languageCode != null && countryCode != null),
-            'languageCode and countryCode should be null or not empty same time') {
+            'languageCode and countryCode should be null or not empty same time') {}
+
+  Future showKeyboard() async {
+    _isSearch = false;
     _channel.setMethodCallHandler(
       (call) async {
         switch (call.method) {
@@ -59,10 +62,6 @@ class Stipop {
         }
       },
     );
-  }
-
-  Future showKeyboard() async {
-    _isSearch = false;
     return await _channel.invokeMethod(SHOW_KEYBOARD, {
       'userID': userId,
       'languageCode': languageCode,
@@ -72,6 +71,32 @@ class Stipop {
 
   Future showSearch() async {
     _isSearch = true;
+    _channel.setMethodCallHandler(
+      (call) async {
+        switch (call.method) {
+          case ON_STICKER_PACK_SELECTED:
+          case ON_STICKER_PACK_SELECTED_LEGACY:
+            try {
+              onStickerPackSelected?.call(SPPackage.fromJson(
+                  Map<String, dynamic>.from(call.arguments)));
+            } catch (e) {
+              throw convertErrorToPlatformException(e);
+            }
+            break;
+          case ON_STICKER_SELECTED:
+            if (_isSearch) hideKeyboard();
+            try {
+              onStickerSelected?.call(SPSticker.fromJson(
+                  Map<String, dynamic>.from(call.arguments)));
+            } catch (e) {
+              throw convertErrorToPlatformException(e);
+            }
+            break;
+          default:
+            throw ("method not defined");
+        }
+      },
+    );
     return await _channel.invokeMethod(SHOW_SEARCH, {
       'userID': userId,
       'languageCode': languageCode,
