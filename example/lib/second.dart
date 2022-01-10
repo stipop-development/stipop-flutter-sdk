@@ -11,7 +11,7 @@ class SecondScreen extends StatefulWidget {
 class SecondState extends State<SecondScreen> {
   late Stipop stipop;
   String callbackMsg = '';
-  String? stickerImg = null;
+  String? stickerImg;
 
   @override
   void initState() {
