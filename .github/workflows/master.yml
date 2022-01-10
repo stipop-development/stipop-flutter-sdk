@@ -38,8 +38,6 @@ jobs:
           draft: false
           prerelease: false
 
-    steps:
-      - uses: actions/checkout@v1
       - name: Install Flutter
         uses: subosito/flutter-action@v1
         with:
