@@ -52,6 +52,8 @@ jobs:
           flutter-version: '2.5.3'
       - name: Install dependencies
         run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
       - name: Setup Pub Credentials
         shell: bash
         env:
