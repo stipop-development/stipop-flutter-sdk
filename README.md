@@ -25,6 +25,10 @@ allprojects {
   }
 }
 // at app level build.gradle
+defaultConfig {
+  ..
+  multiDexEnabled true // Maybe you need this options
+}
 dependencies {
   implementation 'com.github.stipop-development:stipop-android-sdk:0.5.0' 
 }
@@ -40,7 +44,7 @@ dependencies {
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
 ```
-7. Move at 'android/app/src/main/{package}/MainActivity' and change 'FlutterActivity' to 'FlutterFragmentActivity' because SDK uses AndroidX UI components.
+7. Move at 'android/app/src/main/{package}/MainActivity' and **change 'FlutterActivity' to 'FlutterFragmentActivity'** because SDK uses AndroidX UI components.
 
 ```kotlin
 package com.stipop.stipop.stipop_plugin_example

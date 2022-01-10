@@ -1,3 +1,7 @@
+## 0.2.1
+  - Fix 'setMethodCallHandler'
+  - Update Json Dependencies 5.X to 6.X
+
 ## 0.2.0
 * Supports User Id, Language/Country Code Setting at Plugin.
   - Android SDK : 0.5.0
