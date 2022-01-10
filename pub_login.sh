@@ -18,10 +18,8 @@ if [ -z "${PUB_DEV_PUBLISH_EXPIRATION}" ]; then
   exit 1
 fi
 
-PUB_CACHE_PATH=~/.pub-cache
-if [ ! -d PUB_CACHE_PATH ]; then
-  mkdir PUB_CACHE_PATH
-fi
+mkdir -p ~/.pub-cache
+
 cat <<EOF > ~/.pub-cache/credentials.json
 {
   "accessToken":"${PUB_DEV_PUBLISH_ACCESS_TOKEN}",
