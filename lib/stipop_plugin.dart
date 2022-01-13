@@ -25,17 +25,26 @@ class Stipop {
       this.countryCode,
       this.onStickerPackSelected,
       this.onStickerSelected})
-      : assert(userId.isNotEmpty, 'userID should not be empty'), assert((languageCode == null && countryCode == null) || (languageCode != null && countryCode != null), 'languageCode and countryCode should be null or not empty same time');
+      : assert(userId.isNotEmpty, 'userID should not be empty'),
+        assert((languageCode == null && countryCode == null) || (languageCode != null && countryCode != null), 'languageCode and countryCode should be null or not empty same time');
 
   Future showKeyboard() async {
     _setHandler();
-    return await _channel.invokeMethod(showKeyboardTag, {'userID': userId, 'languageCode': languageCode, 'countryCode': countryCode
+    return await _channel.invokeMethod(showKeyboardTag, {
+      'userID': userId,
+      'languageCode': languageCode,
+      'countryCode': countryCode
+    }).then((value) => {
+      print("HERE(showKeyboard)")
     });
   }
 
   Future showSearch() async {
     _setHandler();
-    return await _channel.invokeMethod(showSearchTag, {'userID': userId, 'languageCode': languageCode, 'countryCode': countryCode
+    return await _channel.invokeMethod(showSearchTag, {
+      'userID': userId,
+      'languageCode': languageCode,
+      'countryCode': countryCode
     });
   }
 
@@ -50,9 +59,10 @@ class Stipop {
     );
   }
 
-  void _setHandler(){
+  void _setHandler() {
     _channel.setMethodCallHandler(
-          (call) async {
+      (call) async {
+        print("HERE(inHandler) : ${call.method}");
         switch (call.method) {
           case onStickerPackSelectedTag:
           case onStickerPackSelectedLegacyTag:
