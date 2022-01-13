@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.NonNull
 import androidx.fragment.app.FragmentActivity
-import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -26,19 +25,45 @@ import kotlin.collections.HashMap
 class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAware {
 
     companion object {
-        lateinit var channel: MethodChannel
         const val ARG_USER_ID = "userID"
         const val ARG_LANGUAGE = "languageCode"
         const val ARG_COUNTRY = "countryCode"
+        const val TAG_SHOW_KEYBOARD = "showKeyboard"
+        const val TAG_SHOW_SEARCH = "showSearch"
+        const val TAG_HIDE_KEYBOARD = "hideKeyboard"
     }
 
-    private lateinit var mContext: Context
-    private lateinit var activity: FragmentActivity
+    private var mContext: Context? = null
+    private var mActivity: FragmentActivity? = null
+    private var mChannel: MethodChannel? = null
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "stipop_plugin")
-        channel.setMethodCallHandler(this)
+        mChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "stipop_plugin").apply {
+            setMethodCallHandler(this@StipopPlugin)
+        }
         mContext = flutterPluginBinding.applicationContext
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        mActivity = binding.activity as FragmentActivity
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        //
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        mActivity = binding.activity as FragmentActivity
+    }
+
+    override fun onDetachedFromActivity() {
+        //
+    }
+
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        mContext = null
+        mChannel?.setMethodCallHandler(null)
+        mChannel = null
     }
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
@@ -50,38 +75,47 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
             Locale.getDefault()
         }
         val userId = call.argument<String>(ARG_USER_ID)
-        if (call.method == "showKeyboard") {
-            Stipop.connect(activity, userId!!, this, null, locale, taskCallBack = { isConnected ->
-                when (isConnected) {
-                    true -> Stipop.showKeyboard()
+        when (call.method) {
+            TAG_SHOW_KEYBOARD -> {
+                mActivity?.let {
+                    Stipop.connect(it, userId!!, this, null, locale, taskCallBack = { isConnected ->
+                        when (isConnected) {
+                            true -> Stipop.showKeyboard()
+                        }
+                    })
+                    result.success(true)
+                } ?: kotlin.run {
+                    result.success(false)
                 }
-            })
-            result.success(true)
-        } else if (call.method == "showSearch") {
-            Stipop.connect(activity, userId!!, this, null, locale, taskCallBack = { isConnected ->
-                when (isConnected) {
-                    true -> Stipop.showSearch()
+            }
+            TAG_SHOW_SEARCH -> {
+                mActivity?.let {
+                    Stipop.connect(it, userId!!, this, null, locale, taskCallBack = { isConnected ->
+                        when (isConnected) {
+                            true -> Stipop.showSearch()
+                        }
+                    })
+                    result.success(true)
+                } ?: kotlin.run {
+                    result.success(false)
                 }
-            })
-            result.success(true)
-        } else if (call.method == "hideKeyboard") {
-            this.hideKeyboard()
-            Stipop.hideKeyboard()
-            result.success(true)
-        } else {
-            result.notImplemented()
+            }
+            TAG_HIDE_KEYBOARD -> {
+                this.hideKeyboard()
+                Stipop.hideKeyboard()
+                result.success(true)
+            }
+            else -> {
+                result.notImplemented()
+            }
         }
     }
 
     private fun hideKeyboard() {
         val imm: InputMethodManager =
-            mContext.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            mContext?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         if (imm.isActive)
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-    }
-
-    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
     }
 
     override fun onStickerPackRequested(spPackage: SPPackage): Boolean {
@@ -119,7 +153,7 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
                 order.let { arguments.put("order", it) }
                 stickers.let { arguments.put("stickers", it) }
             }.run {
-                channel.invokeMethod("onStickerPackRequested", this)
+                mChannel?.invokeMethod("onStickerPackRequested", this)
             }
         }
         return true
@@ -135,24 +169,8 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
             arguments["favoriteYN"] = sticker.favoriteYN
             arguments["keyword"] = sticker.keyword
         }.run {
-            channel.invokeMethod("onStickerSelected", this)
+            mChannel?.invokeMethod("onStickerSelected", this)
         }
         return true
-    }
-
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity as FragmentActivity
-    }
-
-    override fun onDetachedFromActivityForConfigChanges() {
-
-    }
-
-    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-
-    }
-
-    override fun onDetachedFromActivity() {
-
     }
 }
