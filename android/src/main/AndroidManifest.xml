@@ -3,9 +3,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <application
-        android:name=".GlobalApplication">
-
-    </application>
+    <application android:name=".GlobalApplication"/>
 
 </manifest>
