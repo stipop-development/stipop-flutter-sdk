@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'stipop_sdk'
-  s.version          = '0.1.0'
+  s.version          = '0.2.2'
   s.summary          = 'Stipop SDK provides over 150,000 .png and .gif stickers that can be easily integrated into mobile app chats, comment sections, live streams, video calls, etc. '
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -16,7 +16,7 @@ A new flutter plugin project.
   s.source_files = 'Classes/**/*'
   s.static_framework = true
   s.dependency 'Flutter'
-  s.dependency 'Stipop', '0.3.0-beta.1'
+  s.dependency 'Stipop', '0.3.0'
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice.

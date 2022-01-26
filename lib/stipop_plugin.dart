@@ -34,8 +34,6 @@ class Stipop {
       'userID': userId,
       'languageCode': languageCode,
       'countryCode': countryCode
-    }).then((value) => {
-      print("HERE(showKeyboard)")
     });
   }
 
@@ -62,7 +60,6 @@ class Stipop {
   void _setHandler() {
     _channel.setMethodCallHandler(
       (call) async {
-        print("HERE(inHandler) : ${call.method}");
         switch (call.method) {
           case onStickerPackSelectedTag:
           case onStickerPackSelectedLegacyTag:

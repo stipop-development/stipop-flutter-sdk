@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
-
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -49,7 +48,7 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        //
+        mActivity = null
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
@@ -57,7 +56,7 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
     }
 
     override fun onDetachedFromActivity() {
-        //
+        mActivity = null
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
