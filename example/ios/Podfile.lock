@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - Stipop (0.3.0-beta.1)
-  - stipop_sdk (0.1.0):
+  - Stipop (0.3.0)
+  - stipop_sdk (0.2.2):
     - Flutter
-    - Stipop (= 0.3.0-beta.1)
+    - Stipop (= 0.3.0)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -21,9 +21,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  Stipop: ddbf37158b5037c09ff8082a8417f98082771e93
-  stipop_sdk: 7468bd9d969cc652bc565377d37e5dac730633cb
+  Stipop: 52fbf336c3a89d13a28d0dd2b756ecab1579bd7f
+  stipop_sdk: 91513bfbfbd0075e0ed267f374ab4394c584539e
 
-PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+PODFILE CHECKSUM: 3b3474815cff308e74761b19f30d426b05320f07
 
 COCOAPODS: 1.11.2
