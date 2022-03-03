@@ -33,7 +33,7 @@ class StickerPickerViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.presentingViewController?.view.alpha = 0.3
+        self.presentingViewController?.view.alpha = 1
     }
     
     override func viewWillDisappear(_ animated: Bool) {
