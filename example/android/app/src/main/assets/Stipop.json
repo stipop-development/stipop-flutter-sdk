@@ -19,7 +19,7 @@
 		  "light": "#414141",
 		  "dark": "#646F7C"
 		},
-		"tintColor": {
+		 "tintColor": {
 		  "light": "#FF5D1E",
 		  "dark": "#FF855B"
 		}
