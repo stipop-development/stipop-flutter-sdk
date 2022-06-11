@@ -235,7 +235,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  // This is what you're looking for!
+  // scroll to the end of message list
   void _scrollDown() {
     controller.animateTo(
       controller.position.maxScrollExtent,
