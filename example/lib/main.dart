@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
   void _pushMessage(chatMessageModel) {
     setState(() {
       messages.add(chatMessageModel);
-      controller.jumpTo(controller.position.maxScrollExtent);
+
     });
   }
 
@@ -118,9 +118,9 @@ class _MyAppState extends State<MyApp> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: (messages[index].messageType == "receiver" || messages[index].messageType == "sender"
-                                ? Colors.lightGreen.shade200
-                                : Colors.white),
+                            color: (messages[index].messageType == "receiver"
+                                ? Colors.blue.shade200
+                                : Colors.lightGreen.shade100),
                           ),
                           padding: const EdgeInsets.all(8),
                           child: _chatItem(messages[index]),
@@ -189,6 +189,7 @@ class _MyAppState extends State<MyApp> {
                               _pushMessage(ChatMessage(
                                   messageContent: txtController.text,
                                   messageType: "sender"));
+                              _scrollDown();
                               txtController.text = "";
 
                             },
@@ -231,6 +232,15 @@ class _MyAppState extends State<MyApp> {
               ),
       ]),
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+    );
+  }
+
+  // This is what you're looking for!
+  void _scrollDown() {
+    controller.animateTo(
+      controller.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
     );
   }
 }
