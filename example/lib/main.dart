@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stipop_plugin_example/second.dart';
 import 'package:stipop_sdk/stipop_plugin.dart';
 
+import 'chat/chatMessageModel.dart';
+
 void main() {
   runApp(const MaterialApp(home: MyApp()));
 }
@@ -17,6 +19,21 @@ class _MyAppState extends State<MyApp> {
   late Stipop stipop;
   String callbackMsg = '';
   String? stickerImg;
+
+  final txtController = TextEditingController();
+
+  List<ChatMessage> messages = [
+    ChatMessage(
+        messageContent: "Hello! Try Stipop Flutter Example!",
+        messageType: "receiver")
+  ];
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    txtController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -35,10 +52,22 @@ class _MyAppState extends State<MyApp> {
         setState(() {
           callbackMsg = 'onStickerSelected\n${sticker.toJson()}';
           stickerImg = sticker.stickerImg;
+          _pushMessage(
+              ChatMessage(messageContent: stickerImg!, messageType: "sticker"));
+          controller.jumpTo(controller.position.maxScrollExtent);
         });
       },
     );
   }
+
+  void _pushMessage(chatMessageModel) {
+    setState(() {
+      messages.add(chatMessageModel);
+
+    });
+  }
+
+  ScrollController controller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +91,8 @@ class _MyAppState extends State<MyApp> {
                   onSelected: (value) async {
                     switch (value) {
                       case "screen":
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SecondScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const SecondScreen()));
                         break;
                     }
                   })
@@ -71,20 +101,33 @@ class _MyAppState extends State<MyApp> {
           body: SafeArea(
             child: Stack(
               children: [
-                Padding(
-                  child: Column(children: [
-                    stickerImg != null
-                        ? Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                            child: Image.network(
-                              stickerImg!,
-                              width: 150,
-                              height: 150,
-                            ))
-                        : Container(),
-                    Text(callbackMsg)
-                  ]),
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 70),
+                ListView.builder(
+                  itemCount: messages.length,
+                  shrinkWrap: true,
+                  controller: controller,
+                  padding: const EdgeInsets.only(top: 10, bottom: 75),
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 16, top: 4, bottom: 4),
+                      child: Align(
+                        alignment: (messages[index].messageType == "receiver"
+                            ? Alignment.topLeft
+                            : Alignment.topRight),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: (messages[index].messageType == "receiver"
+                                ? Colors.blue.shade200
+                                : Colors.lightGreen.shade100),
+                          ),
+                          padding: const EdgeInsets.all(8),
+                          child: _chatItem(messages[index]),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 Align(
                   alignment: Alignment.bottomLeft,
@@ -132,16 +175,23 @@ class _MyAppState extends State<MyApp> {
                                   )),
                             )),
                         const SizedBox(width: 16),
-                        const Expanded(
+                         Expanded(
                             child: TextField(
-                          decoration: InputDecoration(
+                              controller: txtController,
+                          textAlign: TextAlign.left,
+                          decoration: const InputDecoration(
                               border: InputBorder.none,
-                              hintText: "TextField Sample"),
+                              hintText: "Enter Message..."),
                         )),
                         const SizedBox(width: 16),
                         GestureDetector(
                             onTap: () {
-                              //
+                              _pushMessage(ChatMessage(
+                                  messageContent: txtController.text,
+                                  messageType: "sender"));
+                              _scrollDown();
+                              txtController.text = "";
+
                             },
                             child: Align(
                               alignment: Alignment.centerRight,
@@ -149,7 +199,7 @@ class _MyAppState extends State<MyApp> {
                                   height: 40,
                                   width: 40,
                                   decoration: BoxDecoration(
-                                      color: Colors.grey,
+                                      color: Colors.blue,
                                       borderRadius: BorderRadius.circular(40)),
                                   child: const Icon(
                                     Icons.send_rounded,
@@ -163,6 +213,34 @@ class _MyAppState extends State<MyApp> {
               ],
             ),
           )),
+    );
+  }
+
+  Widget _chatItem(ChatMessage chatMessageModel) {
+    return Padding(
+      child: Column(children: [
+        chatMessageModel.messageType == "sticker"
+            ? Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                child: Image.network(
+                  chatMessageModel.messageContent,
+                  width: 85,
+                  height: 85,
+                ))
+            : Container(
+                child: Text(chatMessageModel.messageContent),
+              ),
+      ]),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+    );
+  }
+
+  // scroll to the end of message list
+  void _scrollDown() {
+    controller.animateTo(
+      controller.position.maxScrollExtent,
+      duration: const Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
     );
   }
 }
