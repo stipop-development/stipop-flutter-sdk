@@ -2,6 +2,7 @@ package com.stipop.plugin
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.NonNull
 import androidx.fragment.app.FragmentActivity
@@ -13,7 +14,10 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.stipop.Stipop
-import io.stipop.StipopDelegate
+import io.stipop.delegate.SPComponentLifeCycleDelegate
+import io.stipop.delegate.StipopDelegate
+import io.stipop.models.ComponentEnum
+import io.stipop.models.LifeCycleEnum
 import io.stipop.models.SPPackage
 import io.stipop.models.SPSticker
 import java.util.*
@@ -21,20 +25,24 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 /** StipopPlugin */
-class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityAware {
+class StipopPlugin : FlutterPlugin, MethodCallHandler, ActivityAware, StipopDelegate, SPComponentLifeCycleDelegate {
 
     companion object {
+        var mChannel: MethodChannel? = null
+
+        const val TAG_CONNECT = "connect"
         const val ARG_USER_ID = "userID"
         const val ARG_LANGUAGE = "languageCode"
         const val ARG_COUNTRY = "countryCode"
-        const val TAG_SHOW_KEYBOARD = "showKeyboard"
-        const val TAG_SHOW_SEARCH = "showSearch"
-        const val TAG_HIDE_KEYBOARD = "hideKeyboard"
+
+        const val TAG_SHOW = "show"
+
+        const val TAG_HIDE = "hide"
     }
 
     private var mContext: Context? = null
     private var mActivity: FragmentActivity? = null
-    private var mChannel: MethodChannel? = null
+
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         mChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "stipop_plugin").apply {
@@ -75,46 +83,63 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
         }
         val userId = call.argument<String>(ARG_USER_ID)
         when (call.method) {
-            TAG_SHOW_KEYBOARD -> {
+            TAG_CONNECT -> {
+                Stipop.setComponentLifeCycleDelegate(this)
                 mActivity?.let {
-                    Stipop.connect(it, userId!!, this, null, locale, taskCallBack = { isConnected ->
-                        when (isConnected) {
-                            true -> Stipop.showKeyboard()
+                    Stipop.connect(it, userId!!, this, null, null, locale, taskCallBack = { isConnected ->
+                        if(isConnected) {
+                            result.success(true)
                         }
                     })
-                    result.success(true)
                 } ?: kotlin.run {
                     result.success(false)
                 }
             }
-            TAG_SHOW_SEARCH -> {
-                mActivity?.let {
-                    Stipop.connect(it, userId!!, this, null, locale, taskCallBack = { isConnected ->
-                        when (isConnected) {
-                            true -> Stipop.showSearch()
-                        }
-                    })
-                    result.success(true)
-                } ?: kotlin.run {
-                    result.success(false)
-                }
-            }
-            TAG_HIDE_KEYBOARD -> {
-                this.hideKeyboard()
-                Stipop.hideKeyboard()
+
+            TAG_SHOW -> {
+                Stipop.show()
                 result.success(true)
             }
+
+            TAG_HIDE -> {
+                Stipop.hide()
+                result.success(true)
+            }
+
             else -> {
                 result.notImplemented()
             }
         }
     }
 
-    private fun hideKeyboard() {
-        val imm: InputMethodManager =
-            mContext?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        if (imm.isActive)
-            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+    override fun onStickerSingleTapped(sticker: SPSticker): Boolean {
+        val arguments = HashMap<String, Any>()
+        arguments.apply {
+            arguments["packageId"] = sticker.packageId
+            arguments["stickerId"] = sticker.stickerId
+            sticker.stickerImg?.let { arguments.put("stickerImg", it) }
+            sticker.stickerImgLocalFilePath?.let { arguments.put("stickerImgLocalFilePath", it) }
+            arguments["favoriteYN"] = sticker.favoriteYN
+            arguments["keyword"] = sticker.keyword
+        }.run {
+            mChannel?.invokeMethod("onStickerSingleTapped", this)
+        }
+        return true
+    }
+
+    override fun onStickerDoubleTapped(sticker: SPSticker): Boolean {
+        val arguments = HashMap<String, Any>()
+        arguments.apply {
+            arguments["packageId"] = sticker.packageId
+            arguments["stickerId"] = sticker.stickerId
+            sticker.stickerImg?.let { arguments.put("stickerImg", it) }
+            sticker.stickerImgLocalFilePath?.let { arguments.put("stickerImgLocalFilePath", it) }
+            arguments["favoriteYN"] = sticker.favoriteYN
+            arguments["keyword"] = sticker.keyword
+        }.run {
+            mChannel?.invokeMethod("onStickerDoubleTapped", this)
+        }
+        return true
     }
 
     override fun onStickerPackRequested(spPackage: SPPackage): Boolean {
@@ -157,19 +182,28 @@ class StipopPlugin : FlutterPlugin, MethodCallHandler, StipopDelegate, ActivityA
         }
         return true
     }
-
-    override fun onStickerSelected(sticker: SPSticker): Boolean {
-        val arguments = HashMap<String, Any>()
-        arguments.apply {
-            arguments["packageId"] = sticker.packageId
-            arguments["stickerId"] = sticker.stickerId
-            sticker.stickerImg?.let { arguments.put("stickerImg", it) }
-            sticker.stickerImgLocalFilePath?.let { arguments.put("stickerImgLocalFilePath", it) }
-            arguments["favoriteYN"] = sticker.favoriteYN
-            arguments["keyword"] = sticker.keyword
-        }.run {
-            mChannel?.invokeMethod("onStickerSelected", this)
+    override fun spComponentLifeCycle(componentEnum: ComponentEnum, lifeCycleEnum: LifeCycleEnum) {
+        when(componentEnum){
+            ComponentEnum.PICKER_VIEW -> {
+                when(lifeCycleEnum){
+                    LifeCycleEnum.CREATED -> {
+                        val arguments = HashMap<String, Any>()
+                        arguments.apply {
+                            arguments["isAppear"] = true
+                        }.run {
+                            StipopPlugin.mChannel?.invokeMethod("pickerViewIsAppear", this)
+                        }
+                    }
+                    LifeCycleEnum.DESTROYED -> {
+                        val arguments = HashMap<String, Any>()
+                        arguments.apply {
+                            arguments["isAppear"] = false
+                        }.run {
+                            StipopPlugin.mChannel?.invokeMethod("pickerViewIsAppear", this)
+                        }
+                    }
+                }
+            }
         }
-        return true
     }
 }

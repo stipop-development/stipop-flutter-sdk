@@ -1,53 +1,59 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:stipop_sdk/model/sp_is_view_appear.dart';
 import 'package:stipop_sdk/model/sp_package.dart';
 import 'package:stipop_sdk/model/sp_sticker.dart';
 
 class Stipop {
   static const String channelTag = 'stipop_plugin';
-  static const String showKeyboardTag = 'showKeyboard';
-  static const String showSearchTag = 'showSearch';
-  static const String hideKeyboardTag = 'hideKeyboard';
+  static const String showTag = 'show';
+  static const String connectTag = 'connect';
+  static const String hideTag = 'hide';
+
   static const String onStickerPackSelectedLegacyTag = 'canDownload';
   static const String onStickerPackSelectedTag = 'onStickerPackRequested';
-  static const String onStickerSelectedTag = 'onStickerSelected';
+  static const String onStickerSingleTappedTag = 'onStickerSingleTapped';
+  static const String onStickerDoubleTappedTag = 'onStickerDoubleTapped';
+
+  static const String pickerViewIsAppearTag = 'pickerViewIsAppear';
+
   static const MethodChannel _channel = MethodChannel(channelTag);
 
-  final void Function(SPPackage spPackage)? onStickerPackSelected;
-  final void Function(SPSticker spSticker)? onStickerSelected;
-  final String userId;
-  final String? languageCode;
-  final String? countryCode;
+  String? userId;
 
-  Stipop(this.userId,
-      {this.languageCode,
-      this.countryCode,
-      this.onStickerPackSelected,
-      this.onStickerSelected})
-      : assert(userId.isNotEmpty, 'userID should not be empty'),
-        assert((languageCode == null && countryCode == null) || (languageCode != null && countryCode != null), 'languageCode and countryCode should be null or not empty same time');
+  void Function(SPSticker spSticker)? onStickerSingleTapped;
+  void Function(SPSticker spSticker)? onStickerDoubleTapped;
+  void Function(SPPackage spPackage)? onStickerPackSelected;
 
-  Future showKeyboard() async {
+  void Function(SPIsViewAppear spIsViewAppear)? pickerViewAppear;
+
+  Future connect({
+    userId,
+    Function(SPSticker spSticker)? onStickerSingleTapped,
+    Function(SPSticker spSticker)? onStickerDoubleTapped,
+    Function(SPPackage spPackage)? onStickerPackSelected,
+    Function(SPIsViewAppear spIsViewAppear)? pickerViewAppear,
+  }) async {
+    this.userId = userId;
+    this.onStickerSingleTapped = onStickerSingleTapped;
+    this.onStickerDoubleTapped = onStickerDoubleTapped;
+    this.onStickerPackSelected = onStickerPackSelected;
+    this.pickerViewAppear = pickerViewAppear;
+
     _setHandler();
-    return await _channel.invokeMethod(showKeyboardTag, {
-      'userID': userId,
-      'languageCode': languageCode,
-      'countryCode': countryCode
+    return await _channel.invokeMethod(connectTag, {
+      'userID': userId
     });
   }
 
-  Future showSearch() async {
+  Future<bool> show() async {
     _setHandler();
-    return await _channel.invokeMethod(showSearchTag, {
-      'userID': userId,
-      'languageCode': languageCode,
-      'countryCode': countryCode
-    });
+    return await _channel.invokeMethod(showTag, {});
   }
 
-  Future hideKeyboard() async {
-    return await _channel.invokeMethod(hideKeyboardTag);
+  Future hide() async {
+    return await _channel.invokeMethod(hideTag);
   }
 
   PlatformException convertErrorToPlatformException(dynamic error) {
@@ -70,14 +76,32 @@ class Stipop {
               throw convertErrorToPlatformException(e);
             }
             break;
-          case onStickerSelectedTag:
+          case onStickerSingleTappedTag:
             try {
-              onStickerSelected?.call(SPSticker.fromJson(
+              onStickerSingleTapped?.call(SPSticker.fromJson(
                   Map<String, dynamic>.from(call.arguments)));
             } catch (e) {
               throw convertErrorToPlatformException(e);
             }
             break;
+          case onStickerDoubleTappedTag:
+            try {
+              onStickerDoubleTapped?.call(SPSticker.fromJson(
+                  Map<String, dynamic>.from(call.arguments)));
+            } catch (e) {
+              throw convertErrorToPlatformException(e);
+            }
+            break;
+
+          case pickerViewIsAppearTag:
+            try {
+              pickerViewAppear?.call(SPIsViewAppear.fromJson(
+                  Map<String, dynamic>.from(call.arguments)));
+            } catch (e) {
+              throw convertErrorToPlatformException(e);
+            }
+            break;
+
           default:
             throw ("method not defined");
         }

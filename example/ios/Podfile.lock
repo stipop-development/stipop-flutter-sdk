@@ -1,29 +1,35 @@
 PODS:
   - Flutter (1.0.0)
-  - Stipop (0.3.0)
-  - stipop_sdk (0.2.2):
+  - stipop_sdk (0.9.0-beta.1):
     - Flutter
-    - Stipop (= 0.3.0)
+    - StipopUIKit (= 0.9.6)
+  - StipopUIKit (0.9.6)
+  - url_launcher_ios (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - stipop_sdk (from `.symlinks/plugins/stipop_sdk/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
-    - Stipop
+    - StipopUIKit
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   stipop_sdk:
     :path: ".symlinks/plugins/stipop_sdk/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  Stipop: 52fbf336c3a89d13a28d0dd2b756ecab1579bd7f
-  stipop_sdk: 91513bfbfbd0075e0ed267f374ab4394c584539e
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  stipop_sdk: f79425c26d330e15b93e06260e791f68ba38a4be
+  StipopUIKit: 5aaeab7d5c4b9d40fe106272d0f72583b8c9b407
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
 
 PODFILE CHECKSUM: 3b3474815cff308e74761b19f30d426b05320f07
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

@@ -3,8 +3,10 @@ import UIKit
 import Stipop
 
 public class SwiftStipopPlugin: NSObject, FlutterPlugin {
+    
     static var channel: FlutterMethodChannel?
     var currentStipopVC: UIViewController?
+    static var stipopButton: SPUIButton?
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         channel = FlutterMethodChannel(name: "stipop_plugin", binaryMessenger: registrar.messenger())
@@ -20,49 +22,65 @@ public class SwiftStipopPlugin: NSObject, FlutterPlugin {
                     (UIApplication.shared.delegate?.window??.rootViewController)!
 
         switch call.method {
-        case "showKeyboard":
-            let stickerPickerVC = StickerPickerViewController()
+        case "connect":
+            SwiftStipopPlugin.stipopButton = SPUIButton(type: .system)
             guard let arguments = call.arguments as? Dictionary<String, Any>, let userID = arguments["userID"] as? String else{
                 result(FlutterMethodNotImplemented)
                 return
             }
-            stickerPickerVC.modalPresentationStyle = .overFullScreen
-            stickerPickerVC.channel = SwiftStipopPlugin.channel!
-            stickerPickerVC.userID = userID
-            if let arguments = call.arguments as? Dictionary<String, Any>, let languageCode = arguments["languageCode"] as? String, let countryCode = arguments["countryCode"] as? String {
-                stickerPickerVC.languageCode = languageCode
-                stickerPickerVC.countryCode = countryCode
-            }
-            currentStipopVC = stickerPickerVC
-            viewController.present(stickerPickerVC, animated: false, completion: nil)
-            result(true)
+            SwiftStipopPlugin.stipopButton?.setUser(SPUser(userID: userID), viewType: .picker)
+            viewController.view.addSubview(SwiftStipopPlugin.stipopButton!)
+            SwiftStipopPlugin.stipopButton?.delegate = self
             break;
-        case "showSearch":
-            let searchVC = SearchViewController()
-            guard let arguments = call.arguments as? Dictionary<String, Any>, let userID = arguments["userID"] as? String else{
-                result(FlutterMethodNotImplemented)
-                return
-            }
-            searchVC.modalPresentationStyle = .overFullScreen
-            searchVC.channel = SwiftStipopPlugin.channel!
-            searchVC.userID = userID
-            if let arguments = call.arguments as? Dictionary<String, Any>, let languageCode = arguments["languageCode"] as? String, let countryCode = arguments["countryCode"] as? String {
-                searchVC.languageCode = languageCode
-                searchVC.countryCode = countryCode
-            }
-            currentStipopVC = searchVC
-            viewController.present(searchVC, animated: false, completion: nil)
+            
+        case "show":
+            SwiftStipopPlugin.stipopButton?.sendActions(for: .touchUpInside)
             result(true)
+
             break;
-        case "hideKeyboard":
-            currentStipopVC?.dismiss(animated: false, completion: {
-                self.currentStipopVC = nil
-            })
+        case "hide":
+            SwiftStipopPlugin.stipopButton?.resignFirstResponder()
             result(true)
             break;
         default:
             result(FlutterMethodNotImplemented)
             break;
+        }
+    }
+}
+extension SwiftStipopPlugin: SPUIDelegate {
+    public func onStickerSingleTapped(_ view: SPUIView, sticker: SPSticker) {
+        SwiftStipopPlugin.channel?.invokeMethod("onStickerSingleTapped", arguments: ["stickerId" : sticker.stickerId, "stickerImg" : sticker.stickerImg, "keyword" : sticker.keyword ?? ""])
+    }
+    public func onStickerDoubleTapped(_ view: SPUIView, sticker: SPSticker) {
+        SwiftStipopPlugin.channel?.invokeMethod("onStickerDoubleTapped", arguments: ["stickerId" : sticker.stickerId, "stickerImg" : sticker.stickerImg, "keyword" : sticker.keyword ?? ""])
+    }
+    public func spViewDidAppear(_ view: SPUIView){
+        switch view {
+        case is SPUIPickerInputView:
+            SwiftStipopPlugin.channel?.invokeMethod("pickerViewIsAppear", arguments: ["isAppear": true])
+        case is SPUIPickerCustomView:
+            break
+        case is SPUISearchViewController:
+            break
+        case is SPUIStoreViewController:
+            break
+        default:
+            break
+        }
+    }
+    public func spViewDidDisappear(_ view: SPUIView){
+        switch view {
+        case is SPUIPickerInputView:
+            SwiftStipopPlugin.channel?.invokeMethod("pickerViewIsAppear", arguments: ["isAppear": false])
+        case is SPUIPickerCustomView:
+            break
+        case is SPUISearchViewController:
+            break
+        case is SPUIStoreViewController:
+            break
+        default:
+            break
         }
     }
 }

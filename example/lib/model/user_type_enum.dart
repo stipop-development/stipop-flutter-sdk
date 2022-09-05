@@ -1,0 +1,3 @@
+enum UserTypeEnum{
+  NEW, COMMON
+}

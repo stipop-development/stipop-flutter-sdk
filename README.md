@@ -30,7 +30,7 @@ defaultConfig {
   multiDexEnabled true // Maybe you need this options
 }
 dependencies {
-  implementation 'com.github.stipop-development:stipop-android-sdk:0.5.0' 
+  implementation 'com.github.stipop-development:stipop-android-sdk:0.9.5-beta.2' 
 }
 ```
 6. Move at 'android/app/src/main/res/styles.xml' and change 'parent' to inherit 'Theme.MaterialComponents' because SDK UI uses MaterialComponents. Like below.
@@ -84,45 +84,44 @@ You might call this method at like 'initState()'.
   @override
   void initState() {
     super.initState();
-    stipop = Stipop(
-      'some_user_id',
-      languageCode: 'en', 
-      countryCode: 'US',
-      onStickerPackSelected: (spPackage) {
-        // Selected Sticker Pack passed here.
-        setState(() {
-          
+    stipop.connect(
+        userId: 'someone_user_id',
+        onStickerSingleTapped: (sticker) {
+          // Single tapped Sticker pass here.
+          setState(() {
+          });
+        },
+        onStickerDoubleTapped: (sticker) {
+          // Double tapped Sticker pass here.
+          setState(() {
+          });
+        },
+        onStickerPackSelected: (spPackage) {
+          // Selected Sticker Pack pass here.
+          setState(() {
+            
+          });
+        },
+        pickerViewAppear: (spIsViewAppear) {
+          // PickerView's visibility listen here.
+          bool isAppear = spIsViewAppear.isAppear;
+          setState(() {
+          });
         });
-      },
-      onStickerSelected: (sticker) {
-        // Selected Sticker passed here.
-        setState(() {
-          
-        });
-      },
-    );
   }
 ```
-#### Show Search (Sticker Search View)
-
-**Search View** is where users can search for stickers with search tags like happy, sad, what!, and more and find stickers they can send on chat.
-
-```dart
-stipop.showSearch();
-```
-
 #### Show Keyboard (Sticker Picker View on Keyboard)
 
 **Sticker Picker View** provides in-depth sticker experience. Instead of instantaneous usage from the Search View, users can download and own stickers for a more intimate sticker sending experience.
 
 ```dart
-stipop.showKeyboard();
+stipop.show();
 ```
 
 This method will hide 'Sticker Picker VIew', if it is currently showing.
 
 ```dart
-stipop.hideKeyboard();
+stipop.hide();
 ```
 
 
